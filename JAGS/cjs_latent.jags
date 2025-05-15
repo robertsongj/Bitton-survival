@@ -1,0 +1,17 @@
+
+ model {
+
+  phi ~ dbeta(1,1)
+  p ~ dbeta(1,1)
+
+  for (i in 1:I){
+
+    for (t in (f[i]+1):n.years){
+      z[i,t] ~ dbern(phi * z[i,t-1])
+      m[i,t] ~ dbern(z[i,t] * p)
+    }
+    
+  }
+
+}
+

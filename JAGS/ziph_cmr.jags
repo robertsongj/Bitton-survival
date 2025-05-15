@@ -1,0 +1,43 @@
+
+model {
+
+  phi[1] ~ dbeta(1,1)
+  gamma[1] ~ dbeta(1,1)
+  epsilon[1] ~ dgamma(1,1)
+  theta[1] ~ dunif(0,250)
+  
+  for (logical in (1:time.theta)) {
+    theta[logical + 1] ~ dunif(0,250)
+  }
+
+  for (logical in (1:time.phi)) {
+    phi[logical + 1] ~ dbeta(1,1)
+  }
+
+  for (logical in (1:time.eps)) {
+    epsilon[logical + 1] ~ dbeta(1,1)
+  }
+
+  for (logical in (1:different.gamma)) {
+    gamma[2] ~ dbeta(1,1)
+  }
+
+
+
+  for (i in 1:I){
+
+    for (t in (f[i]+1):n.years){
+    
+        h[i, t-1] ~ dgamma(theta[(t-2) * time.theta +1], theta[(t-2) * time.theta +1])
+
+    
+      z[i,t] ~ dbern(phi[(t-2) * time.phi + 1] * z[i,t-1])
+      a[i,t] ~ dbern(z[i,t] * gamma[(a[i,t-1]) * different.gamma + 1])
+      c[i,t] ~ dpois(a[i,t] * epsilon[(t-2) * time.eps + 1] * h[i, t-1])      
+    }
+
+   }
+  
+  
+}
+

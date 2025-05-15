@@ -1,0 +1,21 @@
+
+model {
+
+  phi ~ dbeta(1,1)
+  gamma[1] ~ dbeta(1,1)
+  gamma[2] ~ dbeta(1,1)  
+  epsilon ~ dgamma(1,1)
+
+  for (i in 1:I){
+
+    for (t in (f[i]+1):n.years){
+      z[i,t] ~ dbern(phi * z[i,t-1])
+      a[i,t] ~ dbern(z[i,t] * gamma[a[i,t-1]+1])
+      c[i,t] ~ dpois(a[i,t] * epsilon)
+    }
+
+   }
+  
+  
+}
+
