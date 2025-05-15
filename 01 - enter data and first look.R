@@ -1,6 +1,6 @@
 # Thu Apr 10 16:03:49 2025 ------------------------------
 
-# bring in data supplied by Pierre-Paul Bitton on number if times of marked
+# bring in data supplied by Pierre-Paul Bitton on number of times marked
 # puffins resighted on Great Island, 2021-2023. 
 
 # Using Riecke et al. 2022 approach to incorporate number of times seen as
@@ -63,7 +63,7 @@ var(mine$`3`[mine$byear == 2021])
 var(mine$`3`[mine$byear == 2022])
 
 # looks like more observations and more variance in 2023 compared to 2022
-# don't see a cohort effect thought, about the same distributions in 2023
+# don't see a cohort effect though, about the same distributions in 2023
 # for 2021 and 2022 cohort
 
 ch <- mine[,2:5]
