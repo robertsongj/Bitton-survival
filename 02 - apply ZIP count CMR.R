@@ -28,7 +28,7 @@ ni <- 50000
 nb <- 10000
 
 
-# obtain m - the standard enounter history array by reducing counts to zeros
+# obtain m - the standard encounter history array by reducing counts to zeros
 
 m <- c
 m[c[] >= 1] <- 1
@@ -169,7 +169,7 @@ model {
   }
 
   for (logical in (1:time.eps)) {
-    epsilon[logical + 1] ~ dbeta(1,1)
+    epsilon[logical + 1] ~ dgamma(1,1)
   }
 
   for (logical in (1:different.gamma)) {
@@ -240,7 +240,8 @@ jags.data <- list(z = z.dat,
                   I = I, f = f, c = c,
                   time.theta = as.numeric(time.theta),
                   different.gamma = as.numeric(different.gamma),
-                  time.phi = as.numeric(time.phi)
+                  time.phi = as.numeric(time.phi),
+                  time.eps = as.numeric(time.eps)
 )
 
 # Initial values: not needed in this case
@@ -259,6 +260,7 @@ print(ziph1, digits = 3)
 time.theta <- TRUE
 time.phi <-  FALSE
 different.gamma <- TRUE
+time.eps <- TRUE
 
 jags.data <- list(z = z.dat, 
                   a = a.dat, 
@@ -266,7 +268,8 @@ jags.data <- list(z = z.dat,
                   I = I, f = f, c = c,
                   time.theta = as.numeric(time.theta),
                   different.gamma = as.numeric(different.gamma),
-                  time.phi = as.numeric(time.phi)
+                  time.phi = as.numeric(time.phi),
+                  time.eps = as.numeric(time.eps)
 )
 
 # Initial values: not needed in this case
@@ -292,7 +295,8 @@ jags.data <- list(z = z.dat,
                   I = I, f = f, c = c,
                   time.theta = as.numeric(time.theta),
                   different.gamma = as.numeric(different.gamma),
-                  time.phi = as.numeric(time.phi)
+                  time.phi = as.numeric(time.phi),
+                  time.eps = as.numeric(time.eps)
 )
 inits <- function(){list(phi = phi, gamma = gamma)}  
 inits <- NULL
@@ -352,8 +356,4 @@ plot(density(rgamma(1000, ziph1$mean$theta, ziph1$mean$theta)))
 
 # something meaningful to report
 round(quantile(rgamma(1000, ziph1$mean$theta, ziph1$mean$theta), probs = c(0.025, 0.975)),3)
-
-plot(density(rgamma(1000, 1, 0.1)))
-
-
 

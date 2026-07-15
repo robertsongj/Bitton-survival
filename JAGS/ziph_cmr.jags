@@ -15,7 +15,7 @@ model {
   }
 
   for (logical in (1:time.eps)) {
-    epsilon[logical + 1] ~ dbeta(1,1)
+    epsilon[logical + 1] ~ dgamma(1,1)
   }
 
   for (logical in (1:different.gamma)) {
