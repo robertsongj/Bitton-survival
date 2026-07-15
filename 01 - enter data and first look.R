@@ -10,6 +10,8 @@
 # robust design approach, but without the need to sub-set resight intervals
 # within year
 
+# script written by G. J. Robertson, Environment and Climate Change Canada
+
 library(here)
 
 # fetch the data - assumes only one .csv file in data folder
@@ -32,7 +34,6 @@ table(df$Activity, df$year)
 # shows 75 banded in 2022, but only 74, 1255-03430 is shown as banded in 
 # 2022 and 2021
 # the activity column gets ignored in the ch-array creation, so no need to fix
-
 
 sumdf <- as.data.frame(table(df$ind, df$year))
 

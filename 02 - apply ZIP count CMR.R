@@ -1,6 +1,9 @@
 # Thu May  1 15:24:31 2025 ------------------------------
 
 # bring in ch data and apply Riecke et al. 2022 protocol
+# adapted for Atlantic Puffins on Great Island, NL, Canada, 2021-2023 spanning the 2022 HPAIV outbreak
+# by G. J. Robertson, Environment and Climate Change Canada
+# data collected by Pierre-Paul Bitton and Antoine Morel, Memorial University of Newfoundland
 
 library(jagsUI)
 library(here)
@@ -89,7 +92,6 @@ jags.data <- list(n.years = n.years, z = z.dat,
 
 parameters <- c('phi', 'p')
 
-# run time: 50k ~ 2m
 Sys.time()
 cjs <- jags(jags.data, NULL, parameters, here("JAGS","cjs_latent.jags"), 
             n.chains = nc, n.thin = nt, n.iter = ni, n.burnin = nb, 
@@ -129,9 +131,10 @@ sink()
 # Data
 jags.data <- list(z = z.dat, a = a.dat, n.years = n.years, 
                   I = I, f = f, c = c)
-# Initial values
-inits <- function(){list(phi = phi, gamma = gamma)}  
+
+# Initial values: not needed in this case
 inits <-  NULL
+
 # Parameters
 parameters <- c('phi', 'epsilon', 'gamma')
 
@@ -142,10 +145,6 @@ zip <- jags(jags.data, inits, parameters, "JAGS/zip_cmr.jags",
             parallel = T)
 Sys.time()  
 print(zip, digits = 3)
-
-
-
-
 
 
 
@@ -243,8 +242,10 @@ jags.data <- list(z = z.dat,
                   different.gamma = as.numeric(different.gamma),
                   time.phi = as.numeric(time.phi)
 )
-inits <- function(){list(phi = phi, gamma = gamma)}  
+
+# Initial values: not needed in this case
 inits <- NULL
+
 parameters <- c('phi', 'epsilon', 'gamma', 'theta')
 
 ziph1 <- jags(jags.data, inits, parameters, "JAGS/ziph_cmr.jags", 
@@ -267,8 +268,10 @@ jags.data <- list(z = z.dat,
                   different.gamma = as.numeric(different.gamma),
                   time.phi = as.numeric(time.phi)
 )
-inits <- function(){list(phi = phi, gamma = gamma)}  
+
+# Initial values: not needed in this case
 inits <- NULL
+
 parameters <- c('phi', 'epsilon', 'gamma', 'theta')
 
 ziph2 <- jags(jags.data, inits, parameters, "JAGS/ziph_cmr.jags", 
@@ -276,7 +279,6 @@ ziph2 <- jags(jags.data, inits, parameters, "JAGS/ziph_cmr.jags",
               parallel = T)
 
 print(ziph2, digits = 3)
-
 
 # different survival across years
 
@@ -334,6 +336,7 @@ kableExtra::kable_styling(bootstrap_options = c("striped", "hover"), full_width 
 
 # NOTE: did not test for time effects on epsilon, 
 # clearly different across two years
+# also leads to a clear forcing of annual variation into theta, which is not desirable
 
 round(ziph1$summary[,1:7],3)
 kableExtra::kbl(ziph1$summary[1:5,1:7],digits = 3, row.names = TRUE, format = "html") |> 
@@ -343,7 +346,6 @@ kableExtra::kbl(ziph1$summary[1:5,1:7],digits = 3, row.names = TRUE, format = "h
 # for comparison
 round(zip$summary[,1:7],3)
 round(cjs$summary[,1:7],3)
-
 
 # what does the theta look like
 plot(density(rgamma(1000, ziph1$mean$theta, ziph1$mean$theta)))
