@@ -35,6 +35,24 @@ table(df$Activity, df$year)
 # 2022 and 2021
 # the activity column gets ignored in the ch-array creation, so no need to fix
 
+# look at date ranges, based on reviewer comments
+
+tapply(df$date[df$Activity == "Observation"], df$year[df$Activity == "Observation"], range)
+
+# toggle to restrain analysis from 20 July to 7 August
+
+df$monday <- format(as.Date(df$date), "%m-%d")
+
+same.window = TRUE
+
+if(same.window){
+  df <- df[!(df$Activity == 'Observation' & (df$monday >= "08-07" | df$monday <= '07-20')),]
+}
+
+dim(df)
+
+
+
 sumdf <- as.data.frame(table(df$ind, df$year))
 
 names(sumdf) <- c('ind', 'year', 'count')
@@ -71,5 +89,9 @@ ch <- mine[,2:5]
 
 # save the ch-array with counts as ch
 
-save(ch, file = here('data', 'chout.Rdata'))
+if(same.window) {
+    save(ch, file = here('data', 'choutsamewindow.Rdata'))
+  } else {
+    save(ch, file = here('data', 'chout.Rdata'))
+}
 
